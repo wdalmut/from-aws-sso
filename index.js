@@ -48,7 +48,7 @@ const create_aws_credentials_file = R.curry((aws_credentials, account_id) => {
     .then(R.always(account_id))
 })
 
-const update_credentials_in_ini_file = R.curry(new_credentials => {
+const update_credentials_in_ini_file = R.curry((aws_credentials, new_credentials) => {
   return Promise.all([new_credentials, fs.readFile(aws_credentials)])
     .then(([new_credentials, ini_file]) => Promise.all([new_credentials, ini.parse(ini_file.toString())]))
     .then(([new_credentials, ini_file]) => R.mergeDeepRight(ini_file, new_credentials))
@@ -63,7 +63,7 @@ exec(`aws sts get-caller-identity --profile ${program.profile}`) // force CLI fo
   .then(R.always(program.profile))
   .then(create_aws_credentials_file(aws_credentials))
   .then(get_latest_credentials(sso_folder))
-  .then(update_credentials_in_ini_file)
+  .then(update_credentials_in_ini_file(aws_credentials))
   .then(write_to_ini_file(aws_credentials))
   .then(() => console.log("Your profile is correctly updated!"))
   .catch(R.compose(console.log, R.prop('message')))
