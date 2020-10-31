@@ -5,7 +5,7 @@ Create or updates the `.aws/credentials` file with AWS SSO temporary credentials
 ## Install
 
 ```sh
-npm i -g @wdalmut/aws-sso
+npm i -g @wdalmut/from-aws-sso
 ```
 
 ## Usage
