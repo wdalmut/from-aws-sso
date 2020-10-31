@@ -28,7 +28,7 @@ const get_latest_credentials = R.curry((sso_folder, account_id) => {
     .then(R.compose(R.bind(Promise.all, Promise), R.map(fs.readFile)))
     .then(R.map(JSON.parse))
     .then(R.map(R.over(R.lensPath(['Credentials', 'Expiration']), R.compose(Date.parse, R.replace("UTC", "Z")))))
-    .then(R.compose(R.reverse, R.sort(R.path(['Credentials', 'Expiration']))))
+    .then(R.sort(R.path(['Credentials', 'Expiration'])))
     .then(R.compose(R.prop('Credentials'), R.head))
     .then(R.invertObj)
     .then(R.map(R.cond([
