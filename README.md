@@ -1,6 +1,6 @@
 # AWS SSO Credentials Generator
 
-Create or updates the `.aws/credentials` file with AWS SSO temporary credentials
+Simplify the AWS credentials for AWS SSO
 
 ## Install
 
@@ -8,17 +8,22 @@ Create or updates the `.aws/credentials` file with AWS SSO temporary credentials
 npm i -g @wdalmut/from-aws-sso
 ```
 
-## Usage
+## Login with SSO
 
-First of all create your AWS SSO credentials
-
-```sh
-aws sso login --profile saml
-```
-
-then transfer that credentials to `.aws/credentials` file
+First of all be sure that you have the credentials
 
 ```sh
-from-aws-sso --profile saml
+aws sso login --profile my-profile
 ```
 
+## Setup AWS credentials
+
+First of you have to setup your `.aws/credentials` file
+
+```ini
+[my-profile]
+credential_process=from-aws-sso -p my-profile
+```
+
+Thanks to the `credential_process` the credentials will be automatically
+generated and refreshed for your application
