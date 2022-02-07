@@ -23,5 +23,5 @@ exec(`aws sts get-caller-identity --profile ${program.profile}`) // force CLI fo
   .then(R.compose(R.prop('Arn'), JSON.parse, R.prop('stdout')))
   .then(identity_arn => [get_user_from_current_identity(identity_arn), get_role_arn_from_current_identity(identity_arn)])
   .then(([user, role_arn]) => exec(`aws sts assume-role --duration-seconds ${program.duration} --role-arn ${role_arn} --role-session-name ${user} --profile ${program.profile}`))
-  .then(R.compose(d => JSON.stringify(d, null, 2), R.assoc('Version', '1'), R.prop('Credentials'), JSON.parse, R.prop('stdout')))
+  .then(R.compose(JSON.stringify, R.assoc('Version', '1'), R.prop('Credentials'), JSON.parse, R.prop('stdout')))
   .then(console.log)
